@@ -1,0 +1,24 @@
+#!/bin/rash
+
+- name: "Verify environment vars"
+  assert:
+    that:
+      - env.ENDPOINT_URL is defined
+      - env.ENDPOINT_URL != ""
+      - env.AWS_DEFAULT_REGION is defined
+      - env.AWS_DEFAULT_REGION != ""
+      - env.AWS_ACCESS_KEY_ID is defined
+      - env.AWS_ACCESS_KEY_ID != ""
+      - env.AWS_SECRET_ACCESS_KEY is defined
+      - env.AWS_SECRET_ACCESS_KEY != ""
+      - env.S3_BUCKET_NAME is defined
+      - env.S3_BUCKET_NAME != ""
+      - env.VOLUME is defined
+      - env.VOLUME != ""
+
+- name: "Launch docker CMD"
+  command:
+    cmd: "/restore.sh"
+    # transforms process in pid 1 (similar to `exec` in bash)
+    transfer_pid_1: true
+
