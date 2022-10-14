@@ -1,13 +1,11 @@
 FROM rustagainshell/rash:1.0.0 AS rash
 
-FROM python:3.8-alpine3.12
+FROM python:3.8.15-slim-buster
 
 COPY --from=rash /bin/rash /bin
 
-RUN apk add --no-cache bash
-
 LABEL maintainer="Sergio del Rio <sdelrio@users.noreploy.github.com>" \
-        python-version=3.8
+        python-version=3.8.15
 
 ENV PYTHONIOENCODING=UTF-8
 ENV PYTHONUNBUFFERED=1

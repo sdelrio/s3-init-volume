@@ -22,6 +22,10 @@ help:	## Show this help menu.
 	@egrep -h "#[#]" $(MAKEFILE_LIST) | sed -e 's/\\$$//' | awk 'BEGIN {FS = "[:=].*?#[#] "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 	@echo ""
 
+debug:
+debug: build-images
+	@docker run --rm --entrypoint=/bin/bash -ti $(IMAGE_NAME):$(IMAGE_TAG)$${TAG_SUFFIX}
+
 build-images:	## Build images
 build-images:
 	@for DOCKERFILE in $(DOCKERFILES);do \

@@ -1,8 +1,23 @@
 #!/bin/bash
 
+# *********CONFIG ************** #
+
+aws configure set plugins.endpoint awscli_plugin_endpoint
+
+cat << EOF > ~/.aws/config
+[plugins]
+endpoint = awscli_plugin_endpoint
+[default]
+region=${AWS_DEFAULT_REGION}
+s3 =
+  endpoint_url=${ENDPOINT_URL}
+s3api =
+  endpoint_url=${ENDPOINT_URL}
+EOF
+
 # *********CHECK BUCKET ************ #
 #[ $(aws --endpoint-url ${ENDPOINT_URL} s3 ls | grep ${S3_BUCKET_NAME} | wc -l) -eq 0 ] \
-BUCKET_EXIST=$(aws --endpoint-url ${ENDPOINT_URL} s3 ls | grep ${S3_BUCKET_NAME} | wc -l)
+BUCKET_EXIST=$(aws s3 ls | grep ${S3_BUCKET_NAME} | wc -l)
 if [ ${BUCKET_EXIST} -eq 0 ]; then
     echo "Bucket ${S3_BUCKET_NAME} does not exist"
     exit 1
@@ -14,13 +29,13 @@ fi
 
 if [ -z "${LAST_BACKUP}" ]; then
 # Find last backup file
-: ${LAST_BACKUP:=$(aws --endpoint-url ${ENDPOINT_URL} s3 ls s3://$S3_BUCKET_NAME | awk -F " " '{print $4}' | head -n1)}
+: ${LAST_BACKUP:=$(aws s3 ls s3://$S3_BUCKET_NAME | awk -F " " '{print $4}' | head -n1)}
 fi
 
 # DOWNLOADING LAST BACKUP FROM S3 BUCKET
 
 echo "=> Restore from S3 => $LAST_BACKUP"
-aws --endpoint-url ${ENDPOINT_URL} s3 cp s3://$S3_BUCKET_NAME/$LAST_BACKUP $RESTORE_FOLDER/$LAST_BACKUP
+aws s3 cp s3://$S3_BUCKET_NAME/$LAST_BACKUP $RESTORE_FOLDER/$LAST_BACKUP
 
 # COPYING TO VOLUME FOLDER
 
