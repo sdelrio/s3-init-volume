@@ -2,7 +2,7 @@
 .PHONY: all build-images build-test-images test-images push-images update-version
 
 IMAGE_NAME ?= sdelrio/s3-init-volume
-IMAGE_TAG ?= latest
+IMAGE_TAG ?= $(shell git rev-parse --short HEAD)-$(shell cat awscli_version)-$(shell cat endpoint_version)
 IMAGE_TEST_TAG ?= test
 IMAGE_PREFIX ?= docker.pkg.github.com
 GPR_TEST_TAG ?= build-cache-tests-no-buildkit
