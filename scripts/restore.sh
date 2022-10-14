@@ -15,6 +15,11 @@ s3api =
   endpoint_url=${ENDPOINT_URL}
 EOF
 
+echo S3_BUCKET_NAME=${S3_BUCKET_NAME}
+
+aws s3 ls
+aws s3 ls s3://$S3_BUCKET_NAME 
+
 # *********CHECK BUCKET ************ #
 #[ $(aws --endpoint-url ${ENDPOINT_URL} s3 ls | grep ${S3_BUCKET_NAME} | wc -l) -eq 0 ] \
 BUCKET_EXIST=$(aws s3 ls | grep ${S3_BUCKET_NAME} | wc -l)
